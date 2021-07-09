@@ -2,18 +2,16 @@ import React, { Component } from 'react';
 import { Col, Row, Container, Button } from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
-import ErrorMessage from '../errorMessage'
+import ErrorMessage from '../errorMessage';
+import CharacterPage from '../characterPage';
 import s from './app.module.css';
 
 
-export class App extends Component {
+export default class App extends Component {
     state = {
         showRandomChar: true,
-        error: false
+        error: false,
     }
-
     toggleRandomChar = () => {
         this.setState((state) => {
             return {
@@ -21,12 +19,19 @@ export class App extends Component {
             }
         });
     }
+    componentDidCatch() {
+        console.log('error');
+        this.setState({
+            error: true,
+        })
+    }
 
     render() {
         if (this.state.error) {
             return <ErrorMessage />
         }
         const char = this.state.showRandomChar ? <RandomChar /> : null;
+        
         return (
             <>
                 <Container>
@@ -36,23 +41,14 @@ export class App extends Component {
                     <Row>
                         <Col lg={{ size: 5, offset: 0 }}>
                             {char}
-                            <Button color="primary" 
-                            className={s.button} 
-                            onClick={this.toggleRandomChar}>Toggle Random char</Button>
+                            <Button color="primary"
+                                className={s.button}
+                                onClick={this.toggleRandomChar}>Toggle Random char</Button>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList />
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails />
-                        </Col>
-                    </Row>
+                    <CharacterPage/>
                 </Container>
             </>
         );
     }
 };
-
-export default App;
