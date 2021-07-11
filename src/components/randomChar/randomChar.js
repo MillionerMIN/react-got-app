@@ -36,7 +36,7 @@ export default class RandomChar extends Component {
         });
     }
 
-    updateChar() {
+    updateChar = () => {
         const id = Math.floor(Math.random() * 140 + 25); //25-140
         // const id = 13000000;
         this.gotService.getCharacter(id)
@@ -64,23 +64,23 @@ function View({ char }) {
     const { name, gender, born, died, culture } = char;
     return (
         <>
-            <h4>Random Character: {name}</h4>
+            <h4>Random Character: {name !== '' ? name : 'not data('}</h4>
             <ul className="list-group list-group-flush">
                 <li className="list-group-item d-flex justify-content-between">
                     <span className="term">Gender</span>
-                    <span>{gender}</span>
+                    <span>{gender !== '' ? gender : 'not data('}</span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between">
                     <span className="term">Born</span>
-                    <span>{born}</span>
+                    <span>{born !== '' ? born : 'not data('}</span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between">
                     <span className="term">Died</span>
-                    <span>{died}</span>
+                    <span>{died !== '' ? died : 'not data('}</span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between">
                     <span className="term">Culture</span>
-                    <span>{culture}</span>
+                    <span>{culture !== '' ? culture : 'not data('}</span>
                 </li>
             </ul>
         </>
