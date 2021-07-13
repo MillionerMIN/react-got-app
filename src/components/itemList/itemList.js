@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Spinner from 'reactstrap/lib/Spinner';
 import ErrorMessage from '../errorMessage';
 import './itemList.css';
+import PropTypes from 'prop-types';
 
 export default class ItemList extends Component {
 
@@ -68,4 +69,13 @@ export default class ItemList extends Component {
             </ul>
         );
     }
+}
+
+ItemList.defaultProps = {
+    onItemSelected: () => {}
+}
+
+ItemList.propTypes={
+    onItemSelected: PropTypes.func
+  
 }
