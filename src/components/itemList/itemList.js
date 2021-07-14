@@ -1,60 +1,50 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, Component} from 'react';
 import Spinner from 'reactstrap/lib/Spinner';
+import gotService from '../../services/gotService';
 import ErrorMessage from '../errorMessage';
 import './itemList.css';
-import PropTypes from 'prop-types';
-import gotService from '../../services/gotService';
 
-class ItemList extends Component {
 
-    componentDidCatch() {
-        this.setState({
-            data: null,
-            error: true,
-        })
-    }
+function ItemList({ getData, onItemSelected, renderItem }) {
 
-    onError(status) {
-        this.setState({
-            data: null,
-            error: true
-        })
-    }
+    const [itemList, setItemList] = useState([])
 
-    renderItems(arr) {
+    useEffect(() => {
+        getData()
+            .then((data) => {
+                setItemList(data)
+            })
+            .catch(() => this.onError());
+    }, []);
+
+    function renderItems(arr) {
         return arr.map((item) => {
             const { id } = item;
-            const label = this.props.renderItem(item);
+            const label = renderItem(item);
             return (
                 <li key={id}
                     className="list-group-item"
-                    onClick={() => this.props.onItemSelected(id)}>
+                    onClick={() => onItemSelected(id)}>
                     {label}
                 </li>
             )
         });
     }
 
-    render() {
-        const {data} = this.props;
-
-        const items = this.renderItems(data);
-
-        return (
-            <ul className="item-list list-group">
-                {items}
-            </ul>
-        );
+    const items = renderItems(itemList)
+    if (items) {
+        return <ErrorMessage />
     }
-}
 
-ItemList.defaultProps = {
-    onItemSelected: () => { }
-}
+    if (!itemList) {
+        return <Spinner />
+    }
 
-ItemList.propTypes = {
-    onItemSelected: PropTypes.func
-
+    return (
+        <ul className="item-list list-group">
+            {items}
+        </ul>
+    );
 }
 
 const withData = (View, getData) => {
@@ -89,5 +79,9 @@ const withData = (View, getData) => {
         }
     }
 }
-const { getAllCharacters} = new gotService();
+const { getAllCharacters } = new gotService();
 export default withData(ItemList, getAllCharacters);
+
+export {
+    ItemList
+}
